@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up()
+    {
+        Schema::create('items', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('location_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('room_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('item_id')->unique();
+            $table->string('description');
+            $table->integer('amount')->default(1);
+            $table->enum('status', ['in_stock', 'in_progress', 'reserved'])->default('in_stock');
+            $table->text('notes')->nullable();
+            $table->string('photo_path')->nullable();
+            $table->timestamps();
+        });
+    }
+
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('items');
+    }
+};
